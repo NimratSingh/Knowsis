@@ -1,0 +1,216 @@
+body {
+      font-family: tahoma, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+}
+
+.Card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background-color: #fddbed;
+}
+
+.button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+}
+
+.button:hover {
+      background-color: #0056b3;
+}
+
+
+.symptom-box, .input {
+      width: 96%;
+      justify-content: center;
+}
+
+.input {
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+}
+
+
+.timer, .symptom, .result {
+      margin-bottom: 15px;
+      font-size: 18px;
+      font-weight: bold;
+}
+
+.symptom-list {
+      margin-bottom: 15px;
+      font-size: 16px;
+}
+
+.symptom-box {
+      color: #000000;
+      background-color: #f0f0f0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      margin: 5px 0;
+      font-size: 16px;
+}
+
+#restartBtn {
+  margin-top: 15px;
+
+}
+
+.result {
+  margin-top: 5px;
+}
+
+.s1 {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 15vw;
+  min-height: 80px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #dddddd;
+  font-size: 20px;
+  margin-bottom: 35px;
+}
+
+h1 {
+  margin: auto;
+}
+
+.s2 {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+#guessTracker {
+      margin-top: 20px;
+      max-width: 400px;
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#guessesList {
+      display: flex;
+      flex-wrap: wrap; /* Allow wrapping to the next row if necessary */
+      gap: 10px; /* Add space between guesses */
+      padding: 0;
+      list-style-type: none;
+      margin: 0;
+    }
+    
+#guessesList li {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      font-size: 14px;
+      white-space: nowrap; /* Prevent breaking words */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#records {
+      margin-top: 20px;
+      max-width: 400px;
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+      background-color: #fffffffd;
+}
+
+.s1 {
+      background-color: #000;
+}
+
+h1 {
+      font-size: 80px;
+}
+
+
+/* New Sidebar Styling */
+.sidebar {
+      width: 250px; /* Sidebar width */
+      min-height: 100vh; /* Full height */
+      background-color: #f5f5f5; /* Sidebar background */
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+}
+
+.sidebar h2 {
+      font-size: 20px;
+      margin-bottom: 15px;
+}
+
+.sidebar ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+}
+
+.sidebar li {
+      flex-wrap: wrap; /* Wrap to the next line if necessary */
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #e16c9b;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      font-size: 16px;
+}
+
+footer {
+      width: 100%;
+      background-color: #f8f9fa;
+      padding: 10px 0;
+      text-align: center;
+      border-top: 1px solid #ddd;
+      font-size: 14px;
+      color: #6c757d;
+}
+
+#difficultyTracker {
+      max-width: 400px;
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+#difficultyList li {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f0f0f0;
+      margin-bottom: 5px;
+      font-size: 14px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    

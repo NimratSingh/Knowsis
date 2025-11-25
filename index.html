@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Knowsis - Medical Diagnostic Game</title>
+  <link href="./styles.css" rel="stylesheet">
+</head>
+<body>
+  <section class="s1">
+    <h1>KNOWSIS</h1>
+    <h2>Practice your medical diagnosis!</h2>
+  </section>
+
+  <section class="s2">
+    <!-- Sidebar Section -->
+    <div class="sidebar">
+      <h3>Possible Diagnoses</h3>
+      <ul id="diagnosisList" class="diagnosis-list"></ul>
+  </div>
+  
+    <div id="game" class="Card">
+      <div class="timer">Time Remaining: <span id="timer">60</span>s</div>
+      <div class="symptom-container" id="symptomContainer"></div>
+      <input type="text" id="diagnosisInput" class="input" placeholder="Enter your diagnosis" />
+      <button id="submitBtn" class="button">Submit</button>
+      <button id="starBtn" class="button" style="background-color: gold;">⭐ Mark as Difficult</button>
+
+      <div id="result" class="result"></div>
+      <div id="guessTracker" class="card">
+        <h3>Past Guesses:</h3>
+        <ul id="guessesList"></ul></div>
+	    
+      <div id="difficultyTracker" class="card" style="margin-top: 20px;">
+        <h3>Difficult Concepts:</h3>
+        <ul id="difficultyList" style="list-style-type: none; padding: 0;"></ul>
+      </div>
+
+      <div id="records" class="card">
+        <h3>Stats</h3>
+        <ul>
+            <li>Best time: <span id="bestTime">--</span>s</li>
+            <li>Worst Time: <span id="worstTime">--</span>s</li>
+        </ul>
+      </div>
+     <button id="restartBtn" class="button" style="display: none;">Play Again</button>
+    </div>
+  </section>
+  <footer>
+    © 2025 KNOWSIS. Made by Clara Goussanou, Luna Kang, and Nimrat Singh :3. All rights reserved.
+  </footer>
+
+  <script>
+    // Diagnostic sets (diagnosis + symptoms)
+	const diagnosticSets = [
+	  {
+	    diagnosis: "Flu",
+	    symptoms: ["Fever", "Cough", "Body aches", "Fatigue", "Chills"],
+	    names: ["flu"]
+	  },
+	  {
+	    diagnosis: "Common Cold",
+	    symptoms: ["Runny nose", "Sore throat", "Sneezing", "Mild cough", "Fatigue"],
+            names: ["common cold", "cold"]
+	  },
+	  {
+	    diagnosis: "Strep Throat",
+	    symptoms: ["Sore throat", "Painful swallowing", "Red, swollen tonsils", "White patches on tonsils", "Fever"],
+            names: []
+	  },
+	  {
+	    diagnosis: "Pneumonia",
+	    symptoms: ["Cough with phlegm", "Fever", "Shortness of breath", "Chest pain", "Fatigue"],
+            names: []
+	  },
+	  {
+	    diagnosis: "Bronchitis",
+	    symptoms: ["Persistent cough", "Production of mucus", "Fatigue", "Shortness of breath", "Mild fever"],
+            names: []
+	  },
+	  {
+	    diagnosis: "Asthma",
+	    symptoms: ["Wheezing", "Shortness of breath", "Chest tightness", "Coughing at night"],
+            names: []
+	  },
+	  {
+	    diagnosis: "Allergic Rhinitis (Hay Fever)",
+	    symptoms: ["Sneezing", "Runny or stuffy nose", "Itchy eyes, nose, or throat", "Watery eyes"],
+            names: ["allergic rhinitis", "hay fever"]
+	  },
+	  {
+	    diagnosis: "Sinusitis",
+	    symptoms: ["Facial pain or pressure", "Nasal congestion", "Loss of smell", "Cough", "Fatigue"],
+            names: []
+	  },
+	  {
+	    diagnosis: "GERD (Gastroesophageal Reflux Disease)",
+	    symptoms: ["Heartburn", "Regurgitation", "Chest pain", "Difficulty swallowing", "Chronic cough"],
+	    names: ["gerd", "gastroesophageal reflux disease", "gastroesophageal reflux"]
+	  },
+	  {
+	    diagnosis: "Irritable Bowel Syndrome (IBS)",
+	    symptoms: ["Abdominal pain", "Bloating", "Diarrhea or constipation", "Mucus in stool"],
+	    names: ["irritable bowel syndrome", "ibs"]
+	  },
+	  {
+	    diagnosis: "Urinary Tract Infection (UTI)",
+	    symptoms: ["Frequent urge to urinate", "Burning sensation during urination", "Cloudy urine", "Pelvic pain"],
+	    names: ["urinary tract infection", "uti"]
+	  },
+	  {
+	    diagnosis: "Kidney Stones",
+	    symptoms: ["Severe back or side pain", "Blood in urine", "Nausea", "Frequent urination"],
+	    names: []
+	  },
+	  {
+	    diagnosis: "Gallstones",
+	    symptoms: ["Intense abdominal pain", "Nausea", "Indigestion", "Jaundice"],
+            names: []
+	  },
+	  {
+	    diagnosis: "Osteoarthritis",
+	    symptoms: ["Joint pain", "Stiffness", "Swelling", "Decreased range of motion"],
+            names: []
+	  },
+	  {
+	    diagnosis: "Rheumatoid Arthritis",
+	    symptoms: ["Joint pain", "Swelling", "Morning stiffness", "Fatigue", "Decreased range of motion"],
+            names: []
+	  },
+	  {
+	    diagnosis: "Osteoporosis",
+	    symptoms: ["Back pain", "Loss of height", "Stooped posture", "Bone fractures"],
+            names: []
+	  },
+	  {
+	    diagnosis: "Migraine",
+	    symptoms: ["Throbbing headache", "Nausea", "Sensitivity to light and sound", "Visual disturbances"],
+            names: []
+	  },
+	  {
+	    diagnosis: "Tension Headache",
+	    symptoms: ["Dull headache", "Tightness around the head", "Scalp tenderness"],
+            names: []
+	  },
+	  {
+	    diagnosis: "Depression",
+	    symptoms: ["Persistent sadness", "Loss of interest", "Fatigue", "Changes in appetite", "Suicidal thoughts"],
+            names: []
+	  },
+	  {
+	    diagnosis: "Anxiety Disorders",
+	    symptoms: ["Excessive worry", "Restlessness", "Fatigue", "Difficulty concentrating", "Physical symptoms like rapid heartbeat"],
+            names: ["anxiety disorder"]
+	  }
+	];
+
+    let currentDiagnosis = "";
+    let currentSymptoms = [];
+    let possibleNames = [];
+    let currentSymptomIndex = 0;
+    let timer = 60;
+    let gameOver = false;
+
+    const timerElement = document.getElementById("timer");
+    const symptomContainer = document.getElementById("symptomContainer");
+    const resultElement = document.getElementById("result");
+    const diagnosisInput = document.getElementById("diagnosisInput");
+    const submitBtn = document.getElementById("submitBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    const stopBtn = document.getElementById("stopBtn");
+    const previousTimes = new Array(0);
+    const bestTime = document.getElementById("bestTime");
+    const worstTime = document.getElementById("worstTime");
+	  
+    const starBtn = document.getElementById("starBtn");
+    const difficultyList = document.getElementById("difficultyList");
+    let difficultySet = new Set(); // Permanent storage for marked diagnoses
+
+    // Display all possible diagnoses
+    const diagnosisList = document.getElementById("diagnosisList");
+    diagnosticSets.forEach(set => {
+      const listItem = document.createElement("li");
+      listItem.textContent = set.diagnosis;
+      diagnosisList.appendChild(listItem);
+    });
+
+    // Randomly select a diagnostic set
+    function selectRandomDiagnosticSet() {
+      const randomIndex = Math.floor(Math.random() * diagnosticSets.length);
+      const selectedSet = diagnosticSets[randomIndex];
+      currentDiagnosis = selectedSet.diagnosis;
+      currentSymptoms = [...selectedSet.symptoms];
+      possibleNames = [...selectedSet.names];
+      shuffleArray(currentSymptoms); // Randomize symptom order
+      currentSymptomIndex = 0;
+    }
+
+    // Shuffle array for random symptom order
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function addSymptomToScreen(symptom) {
+      const symptomBox = document.createElement("div");
+      symptomBox.className = "symptom-box";
+      symptomBox.textContent = symptom;
+      symptomContainer.appendChild(symptomBox);
+    }
+
+    function startTimer() {
+      const interval = setInterval(() => {
+        if (timer > 0 && !gameOver) {
+          timer--;
+          timerElement.textContent = timer;
+        }
+        else if (timer>0 &&gameOver) {
+          clearInterval(interval);
+        } else {
+          clearInterval(interval);
+          endGame(false);
+        }
+      }, 1000);
+    }
+
+    function showSymptomsPeriodically() {
+      // Display the first symptom immediately
+      if (currentSymptomIndex < currentSymptoms.length) {
+        addSymptomToScreen(currentSymptoms[currentSymptomIndex]);
+        currentSymptomIndex++;
+      }
+      // Add new symptoms every 10 seconds
+      const symptomInterval = setInterval(() => {
+        if (currentSymptomIndex < currentSymptoms.length && !gameOver) {
+          addSymptomToScreen(currentSymptoms[currentSymptomIndex]);
+          currentSymptomIndex++;
+        } else {
+          clearInterval(symptomInterval);
+        }
+      }, 5000); // Add a new symptom every 10 seconds
+    }
+
+    function updateTimes() {
+      if (previousTimes.length === 1) {
+        bestTime.textContent = `${previousTimes[0]}`;
+        worstTime.textContent = `${previousTimes[0]}`;
+      } else if (previousTimes.length > 1) {
+	best = 61;
+	worst = -1;
+	for (let i = 0; i < previousTimes.length; i++) {
+	  if (previousTimes[i] < best) {
+	    best = previousTimes[i];
+	  }
+	  if (previousTimes[i] > worst) {
+	    worst = previousTimes[i];
+	  }
+	}
+	bestTime.textContent = `${best}`;
+	worstTime.textContent = `${worst}`;
+      }
+    }
+
+    function endGame(isWin) {
+      gameOver = true;
+      if (isWin) {
+        resultElement.textContent = "🎉 Congratulations! You guessed correctly!";
+        timeTaken = 60 - timer;
+        previousTimes.push(timeTaken);
+      } else {
+        resultElement.textContent = `Game Over. The correct diagnosis was: ${currentDiagnosis}`;
+      }
+      submitBtn.style.display = "none";
+      restartBtn.style.display = "block";
+      updateTimes();
+    }
+
+    function clearMessage() {
+        resultElement.textContent = "";
+    }
+
+    submitBtn.addEventListener("click", () => {
+      const userInput = diagnosisInput.value.trim().toLowerCase();
+
+      if (!userInput) return; // Prevent empty input
+      const existingGuesses = Array.from(guessesList.children).map(guess => guess.textContent.toLowerCase());
+
+      if (existingGuesses.includes(userInput)) {
+        resultElement.textContent = "You've already guessed that :p";
+	setTimeout(clearMessage, 2500);
+        return; // Skip if guess already exists
+      }
+
+      // Add new guess to the list
+      const guessItem = document.createElement("li");
+      guessItem.textContent = diagnosisInput.value.trim(); // Keep original case for display
+      guessesList.appendChild(guessItem);
+      guessItem.style.backgroundColor = "crimson";
+      guessItem.style.borderColor = "maroon";
+
+      if (userInput === currentDiagnosis.toLowerCase() || possibleNames.includes(userInput)) {
+        // Highlight correct guess box in green
+        guessItem.style.backgroundColor = "lightgreen";
+        guessItem.style.borderColor = "green";
+        endGame(true);
+      } else {
+        resultElement.textContent = "Incorrect, try again!";
+	setTimeout(clearMessage, 2500);
+      }
+
+      diagnosisInput.value = ""; // Clear input
+    });
+
+
+    diagnosisInput.addEventListener("keydown", function(event) {
+        if (event.key === "Enter" && !gameOver) {
+            submitBtn.click();
+        }
+    });
+
+    starBtn.addEventListener("click", () => {
+  if (currentDiagnosis && !difficultySet.has(currentDiagnosis) && !gameOver) {
+    difficultySet.add(currentDiagnosis); // Add to the set
+    updateDifficultyList(); // Update the visual list
+    starBtn.textContent = "⭐ Marked as Difficult";
+    starBtn.disabled = true; // Disable after marking
+    endGame(false);
+  }
+});
+
+function updateDifficultyList() {
+  difficultyList.innerHTML = ""; // Clear the current list
+
+  // Add each diagnosis in the set to the list
+  difficultySet.forEach((diagnosis) => {
+    const listItem = document.createElement("li");
+    listItem.textContent = diagnosis;
+    difficultyList.appendChild(listItem);
+  });
+}
+
+    restartBtn.addEventListener("click", () => {
+      timer = 60;
+      gameOver = false;
+      resultElement.textContent = "";
+      diagnosisInput.value = "";
+      submitBtn.style.display = "block";
+      restartBtn.style.display = "none";
+      symptomContainer.innerHTML = ""; // Clear symptoms
+      document.getElementById("guessesList").innerHTML = ""; // Clear past guesses
+      timerElement.textContent = timer;
+      selectRandomDiagnosticSet();
+      startTimer();
+      showSymptomsPeriodically();
+
+      starBtn.textContent = "⭐ Mark as Difficult";
+      starBtn.disabled = false;
+
+    });
+
+    // Initialize game
+    selectRandomDiagnosticSet();
+    startTimer();
+    showSymptomsPeriodically();
+  </script>
+</body>
+</html>
